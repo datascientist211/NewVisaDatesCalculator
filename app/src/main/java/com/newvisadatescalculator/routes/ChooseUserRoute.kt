@@ -5,8 +5,8 @@ import com.newvisadatescalculator.screens.UserListScreen
 
 @Composable
 fun ChooseUserRoute(
-    onNavigateToAddUser: (email: String) -> Unit,
-    onNavigateToTrip: (email: String) -> Unit
+    onNavigateToAddUser: () -> Unit,
+    onNavigateToTrip: () -> Unit
 ) {
     //val chooseUserViewModel: ChooseUserViewModel = viewModel(factory = ChooseUserViewModelFactory())
 

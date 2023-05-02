@@ -25,7 +25,7 @@ fun VisaDatesNavHost(
                 },
             )
         }
-}
+    }
 }
 
 sealed class Screen(val route: String) {

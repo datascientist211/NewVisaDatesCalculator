@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NewVisaDatesCalculator</string>
+    <string name="add_traveler">Add traveler</string>
 </resources>
