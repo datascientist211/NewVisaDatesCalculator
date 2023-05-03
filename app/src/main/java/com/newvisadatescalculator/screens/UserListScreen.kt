@@ -24,6 +24,14 @@ fun UserListScreen(
     onNavigateToAddUser: () -> Unit,
     onNavigateToTrip: () -> Unit
 ) {
+    Text(
+        text = stringResource(R.string.choose_traveler_title),
+        style = MaterialTheme.typography.titleLarge,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .padding(top = 24.dp)
+            .fillMaxWidth()
+    )
     Box(modifier = Modifier.fillMaxSize()) {
         ExtendedFloatingActionButton(
             onClick = onNavigateToAddUser,

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">NewVisaDatesCalculator</string>
     <string name="add_traveler">Add traveler</string>
+    <string name="choose_traveler_title">Please choose the traveler for calculation:</string>
 </resources>
