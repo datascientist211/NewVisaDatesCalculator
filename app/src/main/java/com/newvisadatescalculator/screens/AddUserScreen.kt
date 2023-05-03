@@ -22,9 +22,11 @@ import androidx.compose.ui.window.Dialog
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddUserScreen(
-    onConfirmPressed: () -> Unit,
+    onConfirmPressed: (String) -> Unit,
     onCancelPressed: () -> Unit,
 ) {
+    var username: String = ""
+
     AddUserDialog(
         title = {
             Text(
@@ -34,8 +36,8 @@ fun AddUserScreen(
         },
         content = {
             OutlinedTextField(
-                value = "",
-                onValueChange = { })
+                value = username,
+                onValueChange = { username = it })
         },
         dismissButton = {
             TextButton(
@@ -45,7 +47,9 @@ fun AddUserScreen(
         },
         confirmButton = {
             TextButton(
-                onClick = onConfirmPressed,
+                onClick = {
+                    onConfirmPressed(username)
+                },
                 content = { Text("OK") },
             )
         },

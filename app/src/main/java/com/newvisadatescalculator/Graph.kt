@@ -23,12 +23,6 @@ object Graph {
         )
     }
 
-    private val mainDispatcher: CoroutineDispatcher
-        get() = Dispatchers.Main
-
-    private val ioDispatcher: CoroutineDispatcher
-        get() = Dispatchers.IO
-
     fun provide(context: Context) {
         database = Room.databaseBuilder(context, MainDatabase::class.java, "dates_calculator_database").build()
     }
