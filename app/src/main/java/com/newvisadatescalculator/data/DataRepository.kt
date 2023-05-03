@@ -9,6 +9,7 @@ import com.visadatescalculator.model.PersonDao
 import com.visadatescalculator.model.Trip
 import com.visadatescalculator.model.TripDao
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class DataRepository internal constructor(
@@ -24,7 +25,7 @@ class DataRepository internal constructor(
         }
     }
 
-    fun getAllPersons(): LiveData<List<Person>> {
+    fun getAllPersons(): Flow<List<Person>> {
         return personDao.getAll()
     }
 

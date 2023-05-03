@@ -1,12 +1,12 @@
 package com.newvisadatescalculator.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,11 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.newvisadatescalculator.R
+import com.visadatescalculator.model.Person
 
 @Composable
 fun UserListScreen(
     onNavigateToAddUser: () -> Unit,
-    onNavigateToTrip: () -> Unit
+    onNavigateToTrip: () -> Unit,
+    users: List<Person>
 ) {
     Text(
         text = stringResource(R.string.choose_traveler_title),
@@ -32,6 +34,21 @@ fun UserListScreen(
             .padding(top = 24.dp)
             .fillMaxWidth()
     )
+    Column {
+        users.forEach { user ->
+            user.name?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.displayMedium,
+                    textAlign = TextAlign.Left,
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .fillMaxWidth()
+                )
+            }
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         ExtendedFloatingActionButton(
             onClick = onNavigateToAddUser,
