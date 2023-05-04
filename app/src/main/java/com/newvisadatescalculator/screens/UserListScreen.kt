@@ -26,15 +26,16 @@ fun UserListScreen(
     onNavigateToTrip: () -> Unit,
     users: List<Person>
 ) {
-    Text(
-        text = stringResource(R.string.choose_traveler_title),
-        style = MaterialTheme.typography.titleLarge,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-            .padding(top = 24.dp)
-            .fillMaxWidth()
-    )
     Column {
+        Text(
+            text = stringResource(R.string.choose_traveler_title),
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .fillMaxWidth()
+        )
+
         users.forEach { user ->
             user.name?.let {
                 Text(
