@@ -1,9 +1,7 @@
 package com.newvisadatescalculator.data
 
-import android.content.Context
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import com.visadatescalculator.database.MainDatabase
 import com.visadatescalculator.model.Person
 import com.visadatescalculator.model.PersonDao
 import com.visadatescalculator.model.Trip
@@ -11,12 +9,15 @@ import com.visadatescalculator.model.TripDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DataRepository internal constructor(
+
+@Singleton
+class DataRepository @Inject internal constructor(
     private val personDao: PersonDao,
     private val tripDao: TripDao
-
-    ) {
+) {
 
     @WorkerThread
     suspend fun insertPerson(person: Person) {

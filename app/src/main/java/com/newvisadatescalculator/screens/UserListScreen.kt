@@ -27,8 +27,11 @@ fun UserListScreen(
     users: List<Person>
 ) {
     Column {
+        val textString =
+            stringResource(if (users.isEmpty()) R.string.empty_traveler_title else R.string.choose_traveler_title)
+
         Text(
-            text = stringResource(R.string.choose_traveler_title),
+            text = textString,
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier

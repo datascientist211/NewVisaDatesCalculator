@@ -2,18 +2,19 @@ package com.visadatescalculator.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.newvisadatescalculator.Graph
 import com.newvisadatescalculator.data.DataRepository
 import com.visadatescalculator.model.Person
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class ChooseUserViewModel(
-    private val repository: DataRepository = Graph.dataRepository
+@HiltViewModel
+class ChooseUserViewModel @Inject constructor(
+    private val repository: DataRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ChooseUserViewState())
