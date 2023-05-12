@@ -14,10 +14,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,7 +30,9 @@ fun AddUserScreen(
     onConfirmPressed: (String) -> Unit,
     onCancelPressed: () -> Unit,
 ) {
-    var username: String = ""
+    var username by remember {
+        mutableStateOf("")
+    }
 
     AddUserDialog(
         title = {
@@ -37,7 +44,12 @@ fun AddUserScreen(
         content = {
             OutlinedTextField(
                 value = username,
-                onValueChange = { username = it })
+                onValueChange = { newText ->
+                    username = newText
+                },
+                label = { Text(text = "Name") },
+                placeholder = { Text(text = "Enter your name") }
+            )
         },
         dismissButton = {
             TextButton(
