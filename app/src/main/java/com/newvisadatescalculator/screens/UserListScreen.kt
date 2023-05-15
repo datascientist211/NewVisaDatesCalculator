@@ -45,7 +45,7 @@ fun UserListScreen(
                 onNavigateToTrip(user.uid)
             }) {
                 Text(
-                    text = user.name ?: stringResource(R.string.unknown_user_name),
+                    text = user.name ?: stringResource(R.string.unknown_traveler_name),
                     style = MaterialTheme.typography.displayMedium,
                     textAlign = TextAlign.Left,
                     modifier = Modifier

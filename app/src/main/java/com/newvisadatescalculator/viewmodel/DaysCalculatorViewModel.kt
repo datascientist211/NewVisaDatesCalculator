@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.newvisadatescalculator.data.DataRepository
+import com.visadatescalculator.model.Person
 import com.visadatescalculator.model.Trip
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,10 +31,12 @@ class DaysCalculatorViewModel @Inject constructor(
         viewModelScope.launch {
             combine(
                 repository.getTripsByPersonId(personUid),
+                repository.getPersonById(personUid),
                 MutableStateFlow(null)
-            ) { trips, error ->
+            ) { trips, person, error ->
                 DaysCalculatorViewState(
                     trips = trips,
+                    user = person,
                     errorMessage = error
                 )
             }.catch { throwable ->
@@ -48,6 +51,7 @@ class DaysCalculatorViewModel @Inject constructor(
 
 data class DaysCalculatorViewState(
     val trips: List<Trip> = emptyList(),
+    val user: Person? = null,
     val errorMessage: String? = null,
     val resultTripDays: Int? = null,
 )

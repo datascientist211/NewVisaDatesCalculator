@@ -30,6 +30,9 @@ class DataRepository @Inject internal constructor(
         return personDao.getAll()
     }
 
+    fun getPersonById(personUid: Int): Flow<Person> {
+        return personDao.getPersonById(personUid)
+    }
     @WorkerThread
     suspend fun insertTrip(trip: Trip) {
         withContext(Dispatchers.IO) {

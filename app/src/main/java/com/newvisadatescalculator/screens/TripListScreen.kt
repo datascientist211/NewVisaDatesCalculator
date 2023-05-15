@@ -18,58 +18,65 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.newvisadatescalculator.R
+import com.visadatescalculator.model.Person
 import com.visadatescalculator.model.Trip
 
 @Composable
 fun TripListScreen(
     onNavigateToAddTrip: () -> Unit,
-    trips: List<Trip>
+    trips: List<Trip>,
+    person: Person?
 ) {
-    Column {
-        val textString =
-            stringResource(if (trips.isEmpty()) R.string.empty_trips_title else R.string.press_calculation_title)
+    person?.let { traveler ->
+        Column {
+            val textString =
+                stringResource(
+                    if (trips.isEmpty()) R.string.empty_trips_title else R.string.press_calculation_title,
+                    traveler.name ?: stringResource(R.string.unknown_traveler_name)
+                )
 
-        Text(
-            text = textString,
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(top = 24.dp)
-                .fillMaxWidth()
-        )
-
-        if (trips.isNotEmpty()) {
-            CalculationButton {
-                /* TODO */
-            }
-        }
-
-        trips.forEach { trip ->
             Text(
-                text = trip.uid.toString(),
-                style = MaterialTheme.typography.displayMedium,
-                textAlign = TextAlign.Left,
+                text = textString,
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(top = 24.dp)
                     .fillMaxWidth()
             )
-        }
-    }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        ExtendedFloatingActionButton(
-            onClick = onNavigateToAddTrip,
-            modifier = Modifier
-                .padding(all = 16.dp)
-                .align(alignment = Alignment.BottomEnd)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "add trip",
-            )
-            Text(
-                text = stringResource(R.string.add_trip),
-            )
+            if (trips.isNotEmpty()) {
+                CalculationButton {
+                    /* TODO */
+                }
+            }
+
+            trips.forEach { trip ->
+                Text(
+                    text = trip.uid.toString(),
+                    style = MaterialTheme.typography.displayMedium,
+                    textAlign = TextAlign.Left,
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .fillMaxWidth()
+                )
+            }
+        }
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            ExtendedFloatingActionButton(
+                onClick = onNavigateToAddTrip,
+                modifier = Modifier
+                    .padding(all = 16.dp)
+                    .align(alignment = Alignment.BottomEnd)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "add trip",
+                )
+                Text(
+                    text = stringResource(R.string.add_trip),
+                )
+            }
         }
     }
 }

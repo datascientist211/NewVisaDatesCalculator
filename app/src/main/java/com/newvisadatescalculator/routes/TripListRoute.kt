@@ -17,6 +17,7 @@ fun TripListRoute(
 
     TripListScreen(
         onNavigateToAddTrip = onNavigateToAddTrip,
-        viewState.trips
+        viewState.trips,
+        viewState.user
     )
 }

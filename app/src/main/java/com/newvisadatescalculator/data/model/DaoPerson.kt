@@ -1,6 +1,5 @@
 package com.visadatescalculator.model
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -11,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 interface PersonDao {
     @Query("SELECT * FROM person")
     fun getAll(): Flow<List<Person>>
+
+    @Query("SELECT * FROM person where uid = :personId LIMIT 1")
+    fun getPersonById(personId: Int): Flow<Person>
 
     @Insert
     fun insertAll(vararg users: Person)
