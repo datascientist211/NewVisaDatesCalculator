@@ -1,9 +1,10 @@
 package com.visadatescalculator.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.newvisadatescalculator.data.DataRepository
-import com.visadatescalculator.model.Person
+import com.visadatescalculator.model.Trip
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,23 +14,26 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ChooseUserViewModel @Inject constructor(
-    private val repository: DataRepository
+class DaysCalculatorViewModel @Inject constructor(
+    private val repository: DataRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(ChooseUserViewState())
+    private val _state = MutableStateFlow(DaysCalculatorViewState())
 
-    val state: StateFlow<ChooseUserViewState>
+    val state: StateFlow<DaysCalculatorViewState>
         get() = _state
 
     init {
+        val personUid = checkNotNull(savedStateHandle.get<Int>("personUid"))
+
         viewModelScope.launch {
             combine(
-                repository.getAllPersons(),
+                repository.getTripsByPersonId(personUid),
                 MutableStateFlow(null)
-            ) { persons, error ->
-                ChooseUserViewState(
-                    users = persons,
+            ) { trips, error ->
+                DaysCalculatorViewState(
+                    trips = trips,
                     errorMessage = error
                 )
             }.catch { throwable ->
@@ -42,7 +46,8 @@ class ChooseUserViewModel @Inject constructor(
     }
 }
 
-data class ChooseUserViewState(
-    val users: List<Person> = emptyList(),
-    val errorMessage: String? = null
+data class DaysCalculatorViewState(
+    val trips: List<Trip> = emptyList(),
+    val errorMessage: String? = null,
+    val resultTripDays: Int? = null,
 )

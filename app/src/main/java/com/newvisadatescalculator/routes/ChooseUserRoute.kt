@@ -10,7 +10,7 @@ import com.visadatescalculator.viewmodel.ChooseUserViewModel
 @Composable
 fun ChooseUserRoute(
     onNavigateToAddUser: () -> Unit,
-    onNavigateToTrip: () -> Unit,
+    onNavigateToTrip: (Int) -> Unit,
     viewModel: ChooseUserViewModel = hiltViewModel()
 ) {
 

@@ -5,14 +5,15 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TripDao {
     @Query("SELECT * FROM trip")
-    fun getAll(): LiveData<List<Trip>>
+    fun getAll(): Flow<List<Trip>>
 
     @Query("SELECT * FROM trip where person_uid = :personId ORDER BY leave_date DESC")
-    fun getTripsByPersonId(personId: Int): LiveData<List<Trip>>
+    fun getTripsByPersonId(personId: Int): Flow<List<Trip>>
 
 
     @Insert

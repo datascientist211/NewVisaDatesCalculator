@@ -44,11 +44,7 @@ class DataRepository @Inject internal constructor(
         }
     }
 
-    fun getAllTrips(): LiveData<List<Trip>> {
-        return tripDao.getAll()
-    }
-
-    fun getTripsByPersonId(personId: Int): LiveData<List<Trip>> {
-        return tripDao.getTripsByPersonId(personId)
+    fun getTripsByPersonId(personUid: Int): Flow<List<Trip>> {
+        return tripDao.getTripsByPersonId(personUid)
     }
 }

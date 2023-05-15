@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">NewVisaDatesCalculator</string>
     <string name="add_traveler">Add traveler</string>
+    <string name="add_trip">Add new trip</string>
     <string name="choose_traveler_title">Please choose the traveler for calculation:</string>
     <string name="empty_traveler_title">Unfortunately we don\'t have travelers. \n Please add one by clicking "Add traveler" button</string>
+    <string name="warning_trips_text">Make sure you enter all trips that can be included in the calculation (i.e. approximately last year)</string>
+    <string name="unknown_user_name">Unknown user name</string>
 </resources>

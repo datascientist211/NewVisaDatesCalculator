@@ -11,7 +11,6 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,17 +18,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.newvisadatescalculator.R
-import com.visadatescalculator.model.Person
+import com.visadatescalculator.model.Trip
 
 @Composable
-fun UserListScreen(
-    onNavigateToAddUser: () -> Unit,
-    onNavigateToTrip: (Int) -> Unit,
-    users: List<Person>
+fun TripListScreen(
+    onNavigateToAddTrip: () -> Unit,
+    trips: List<Trip>
 ) {
     Column {
         val textString =
-            stringResource(if (users.isEmpty()) R.string.empty_traveler_title else R.string.choose_traveler_title)
+            stringResource(if (trips.isEmpty()) R.string.empty_traveler_title else R.string.choose_traveler_title)
 
         Text(
             text = textString,
@@ -40,36 +38,31 @@ fun UserListScreen(
                 .fillMaxWidth()
         )
 
-        users.forEach { user ->
-            TextButton(onClick = {
-                onNavigateToTrip(user.uid)
-            }) {
-                Text(
-                    text = user.name ?: stringResource(R.string.unknown_user_name),
-                    style = MaterialTheme.typography.displayMedium,
-                    textAlign = TextAlign.Left,
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .fillMaxWidth(),
-
-                    )
-            }
+        trips.forEach { trip ->
+            Text(
+                text = trip.uid.toString(),
+                style = MaterialTheme.typography.displayMedium,
+                textAlign = TextAlign.Left,
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .fillMaxWidth()
+            )
         }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         ExtendedFloatingActionButton(
-            onClick = onNavigateToAddUser,
+            onClick = onNavigateToAddTrip,
             modifier = Modifier
                 .padding(all = 16.dp)
                 .align(alignment = Alignment.BottomEnd)
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
-                contentDescription = "add user",
+                contentDescription = "add trip",
             )
             Text(
-                text = stringResource(R.string.add_traveler),
+                text = stringResource(R.string.add_trip),
             )
         }
     }
