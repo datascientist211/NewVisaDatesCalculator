@@ -27,7 +27,7 @@ fun TripListScreen(
 ) {
     Column {
         val textString =
-            stringResource(if (trips.isEmpty()) R.string.empty_traveler_title else R.string.choose_traveler_title)
+            stringResource(if (trips.isEmpty()) R.string.empty_trips_title else R.string.press_calculation_title)
 
         Text(
             text = textString,
@@ -37,6 +37,12 @@ fun TripListScreen(
                 .padding(top = 24.dp)
                 .fillMaxWidth()
         )
+
+        if (trips.isNotEmpty()) {
+            CalculationButton {
+                /* TODO */
+            }
+        }
 
         trips.forEach { trip ->
             Text(
@@ -65,5 +71,17 @@ fun TripListScreen(
                 text = stringResource(R.string.add_trip),
             )
         }
+    }
+}
+
+@Composable
+fun CalculationButton(onNavigateCalculationScreen: () -> Unit) {
+    ExtendedFloatingActionButton(
+        onClick = onNavigateCalculationScreen,
+        modifier = Modifier.padding(all = 16.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.calculate_days),
+        )
     }
 }
