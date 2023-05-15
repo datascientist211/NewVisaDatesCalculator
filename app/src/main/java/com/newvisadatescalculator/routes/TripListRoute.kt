@@ -9,7 +9,7 @@ import com.visadatescalculator.viewmodel.DaysCalculatorViewModel
 
 @Composable
 fun TripListRoute(
-    onNavigateToAddTrip: () -> Unit,
+    onNavigateToAddTrip: (Int) -> Unit,
     viewModel: DaysCalculatorViewModel = hiltViewModel()
 ) {
 

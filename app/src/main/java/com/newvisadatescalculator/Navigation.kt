@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.newvisadatescalculator.routes.AddTripRoute
 import com.newvisadatescalculator.routes.AddUserRoute
 import com.newvisadatescalculator.routes.ChooseUserRoute
 import com.newvisadatescalculator.routes.TripListRoute
@@ -34,22 +35,30 @@ fun VisaDatesNavHost(
         }
 
         composable(Screen.NewUser.route) {
-            AddUserRoute(
-                onDonePressed = {
-                    navController.popBackStack(Screen.ChooseUser.route, false)
-                }
-            )
+            AddUserRoute(onDonePressed = {
+                navController.popBackStack(Screen.ChooseUser.route, false)
+            })
         }
 
         composable(
             route = Screen.TripDaysCalculator.route,
-            arguments = listOf(
-                navArgument("personUid") { type = NavType.IntType }
-            )) {
-            TripListRoute(
-                onNavigateToAddTrip = {
-                    navController.navigate(Screen.NewTrip.route)
-                }
+            arguments = listOf(navArgument("personUid") {
+                type = NavType.IntType
+            })
+        ) {
+            TripListRoute(onNavigateToAddTrip = { personUid ->
+                navController.navigate(Screen.AddTrip.createRoute(personUid))
+            })
+        }
+
+        composable(
+            route = Screen.AddTrip.route,
+            arguments = listOf(navArgument("personUid") {
+                type = NavType.IntType
+            })
+        ) {
+            AddTripRoute(
+                onBackPressed = { navController.popBackStack(Screen.ChooseUser.route, false) }
             )
         }
     }
@@ -62,5 +71,8 @@ sealed class Screen(val route: String) {
     }
 
     object NewUser : Screen("new_user")
-    object NewTrip : Screen("new_trip")
+
+    object AddTrip : Screen("add_trip/{personUid}") {
+        fun createRoute(personUid: Int) = "add_trip/$personUid"
+    }
 }

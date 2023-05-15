@@ -23,17 +23,14 @@ import com.visadatescalculator.model.Trip
 
 @Composable
 fun TripListScreen(
-    onNavigateToAddTrip: () -> Unit,
-    trips: List<Trip>,
-    person: Person?
+    onNavigateToAddTrip: (Int) -> Unit, trips: List<Trip>, person: Person?
 ) {
     person?.let { traveler ->
         Column {
-            val textString =
-                stringResource(
-                    if (trips.isEmpty()) R.string.empty_trips_title else R.string.press_calculation_title,
-                    traveler.name ?: stringResource(R.string.unknown_traveler_name)
-                )
+            val textString = stringResource(
+                if (trips.isEmpty()) R.string.empty_trips_title else R.string.press_calculation_title,
+                traveler.name ?: stringResource(R.string.unknown_traveler_name)
+            )
 
             Text(
                 text = textString,
@@ -64,7 +61,7 @@ fun TripListScreen(
 
         Box(modifier = Modifier.fillMaxSize()) {
             ExtendedFloatingActionButton(
-                onClick = onNavigateToAddTrip,
+                onClick = { onNavigateToAddTrip(person.uid) },
                 modifier = Modifier
                     .padding(all = 16.dp)
                     .align(alignment = Alignment.BottomEnd)
@@ -84,8 +81,7 @@ fun TripListScreen(
 @Composable
 fun CalculationButton(onNavigateCalculationScreen: () -> Unit) {
     ExtendedFloatingActionButton(
-        onClick = onNavigateCalculationScreen,
-        modifier = Modifier.padding(all = 16.dp)
+        onClick = onNavigateCalculationScreen, modifier = Modifier.padding(all = 16.dp)
     ) {
         Text(
             text = stringResource(R.string.calculate_days),
