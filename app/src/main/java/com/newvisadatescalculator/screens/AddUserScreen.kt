@@ -7,12 +7,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddUserScreen(
     onConfirmPressed: (String) -> Unit,
@@ -38,18 +36,13 @@ fun AddUserScreen(
         title = {
             Text(
                 text = "Enter traveler's name",
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.h5,
             )
         },
         content = {
-            OutlinedTextField(
-                value = username,
-                onValueChange = { newText ->
-                    username = newText
-                },
-                label = { Text(text = "Name") },
-                placeholder = { Text(text = "Enter your name") }
-            )
+            OutlinedTextField(value = username, onValueChange = { newText ->
+                username = newText
+            }, label = { Text(text = "Name") }, placeholder = { Text(text = "Enter your name") })
         },
         dismissButton = {
             TextButton(
