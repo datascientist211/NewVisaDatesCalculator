@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.newvisadatescalculator.data.DataRepository
-import com.newvisadatescalculator.viewmodel.ErrorType.END_BEFORE_START
 import com.newvisadatescalculator.viewmodel.ErrorType.EXCEPTION
 import com.newvisadatescalculator.viewmodel.ErrorType.INTERSECTION
+import com.newvisadatescalculator.viewmodel.ErrorType.NO_PERIOD
 import com.visadatescalculator.model.Trip
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +22,19 @@ class AddTripViewModel @Inject constructor(
     private val repository: DataRepository, private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    // Holds a new trip which was just saved
+    private val _newTrip = MutableStateFlow<Trip?>(null)
+
+    // Holds a date trip starts
+    private val _startDate = MutableStateFlow(DateTime())
+
+    // Holds a date trip finished
+    private val _endDate = MutableStateFlow(DateTime())
+
+    // Holds an error
+    private val _errorType = MutableStateFlow<ErrorType?>(null)
+
+
     private val _state = MutableStateFlow(AddTripViewState(personUid = getPersonId()))
 
     val state: StateFlow<AddTripViewState>
@@ -32,12 +45,19 @@ class AddTripViewModel @Inject constructor(
 
         viewModelScope.launch {
             combine(
-                MutableStateFlow(personUid),
-                repository.getTripsByPersonId(personUid)
-            ) { personUid, trips ->
+                repository.getTripsByPersonId(personUid),
+                _errorType,
+                _newTrip,
+                _startDate,
+                _endDate
+            ) { trips, error, newTrip, startDate, endDate ->
                 AddTripViewState(
                     trips = trips,
-                    personUid = personUid
+                    newTrip = newTrip,
+                    enterDate = startDate,
+                    leaveDate = endDate,
+                    personUid = getPersonId(),
+                    errorType = error
                 )
             }.catch { throwable ->
                 _state.value = AddTripViewState(
@@ -54,32 +74,39 @@ class AddTripViewModel @Inject constructor(
         return checkNotNull(savedStateHandle.get<Int>("personUid"))
     }
 
-    fun addTrip() {
-        viewModelScope.launch {
-            val enterDate = _state.value.enterDate
-            val leaveDate = _state.value.leaveDate
-            if (enterDate.isBefore(leaveDate)) {
-                if (isPeriodsCorrect()) {
-                    val trip = Trip(enterDate, leaveDate, _state.value.personUid)
-                    repository.insertTrip(trip)
-                    _state.value.newTrip = trip
+    fun addTrip(enterDate: DateTime?, leaveDate: DateTime?) {
+        enterDate?.let { startDate ->
+            _startDate.value = startDate
+            leaveDate?.let { endDate ->
+                _endDate.value = endDate
+                if (checkNoIntersection()) {
+                    addNewTrip(Trip(startDate, endDate, _state.value.personUid))
                 } else {
-                    _state.value.errorType = INTERSECTION
-                    //"This trip intersects other trip"
+                    _errorType.value = INTERSECTION
                 }
-            } else {
-                _state.value.errorType = END_BEFORE_START
-                //"The date of entrance is later than date of leaving schengen area"
+            } ?: run {
+                _errorType.value = NO_PERIOD
             }
+        } ?: run {
+            _errorType.value = NO_PERIOD
         }
     }
 
-    private fun isPeriodsCorrect(): Boolean {
+    private fun addNewTrip(trip: Trip) {
+        viewModelScope.launch {
+            repository.insertTrip(trip)
+            _newTrip.value = trip
+        }
+    }
+
+    private fun checkNoIntersection(): Boolean {
         val startDate = _state.value.enterDate
         val endDate = _state.value.leaveDate
         for (trip in _state.value.trips) {
-            val correctPeriod = (startDate.isBefore(trip.enterDate) && endDate.isBefore(trip.enterDate)) ||
-                        (startDate.isAfter(trip.leaveDate) && endDate.isAfter(trip.leaveDate))
+            val correctPeriod =
+                (startDate.isBefore(trip.enterDate) && endDate.isBefore(trip.enterDate)) || (startDate.isAfter(
+                    trip.leaveDate
+                ) && endDate.isAfter(trip.leaveDate))
             if (!correctPeriod) {
                 return false
             }
@@ -94,13 +121,10 @@ data class AddTripViewState(
     var enterDate: DateTime = DateTime(),
     var leaveDate: DateTime = DateTime(),
     var personUid: Int,
-    var errorType: ErrorType? = null,
-    val now: DateTime = DateTime()
+    var errorType: ErrorType? = null
 )
 
 
 enum class ErrorType {
-    INTERSECTION,
-    END_BEFORE_START,
-    EXCEPTION
+    INTERSECTION, NO_PERIOD, EXCEPTION
 }

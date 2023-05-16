@@ -13,4 +13,9 @@
     <string name="calculate_days">Calculate days</string>
     <string name="new_trip_title">New trip</string>
 
+    <string name="save_new_trip_title">Save trip</string>
+    <string name="intersection_error_text">There is an intersection with other trips. Please choose different dates</string>
+    <string name="exception_error_text">Unfortunately some exception happen. Please try again.</string>
+    <string name="no_period_error_text">Please, first choose the range of dates and then click the save button</string>
+    <string name="choose_dates_trip_title">Please choose start and end dates of the trip</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -20,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -40,22 +40,20 @@ fun VisaDatesNavHost(
         navController = navController,
         startDestination = Screen.ChooseUser.route,
     ) {
-        composable(Screen.ChooseUser.route) { backStackEntry ->
+        composable(Screen.ChooseUser.route) {
             ChooseUserRoute(
                 onNavigateToAddUser = {
                     navController.navigate(Screen.NewUser.route)
                 },
                 onNavigateToTrip = { personUid ->
-                    if (backStackEntry.getLifecycle().currentState == Lifecycle.State.RESUMED) {
-                        navController.navigate(Screen.TripDaysCalculator.createRoute(personUid))
-                    }
+                    navController.navigate(Screen.TripDaysCalculator.createRoute(personUid))
                 },
             )
         }
 
         composable(Screen.NewUser.route) {
             AddUserRoute(onDonePressed = {
-                navController.popBackStack()
+                navController.navigateUp()
             })
         }
 
@@ -64,11 +62,13 @@ fun VisaDatesNavHost(
                 type = NavType.IntType
             })
         ) {
-            TripListRoute(onNavigateToAddTrip = { personUid ->
-                navController.navigate(Screen.AddTrip.createRoute(personUid))
-            }, onBackPress = {
-                navController.popBackStack()
-            })
+            TripListRoute(
+                onNavigateToAddTrip = { personUid ->
+                    navController.navigate(Screen.AddTrip.createRoute(personUid))
+                },
+                onBackPress = {
+                    navController.navigateUp()
+                })
         }
 
         composable(
@@ -76,9 +76,11 @@ fun VisaDatesNavHost(
                 type = NavType.IntType
             })
         ) {
-            AddTripRoute(onBackPressed = {
-                navController.popBackStack()
-            })
+            AddTripRoute(
+                onBackPressed = { navController.navigateUp() },
+                onTripSaved = { personUid ->
+                    navController.navigate(Screen.TripDaysCalculator.createRoute(personUid))
+                })
         }
     }
 }
@@ -86,7 +88,9 @@ fun VisaDatesNavHost(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VisaDatesAppBar(
-    onBackPress: (() -> Unit)? = null, textTitle: String
+    onBackPress: (() -> Unit)? = null,
+    onDonePressed: (() -> Unit)? = null,
+    textTitle: String
 ) {
     TopAppBar(
         title = {
@@ -95,12 +99,23 @@ fun VisaDatesAppBar(
         navigationIcon = {
             onBackPress?.let {
                 IconButton(
+                    onClick = it, colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = Color.White
+                    )
+                ) {
+                    Icon(Icons.Filled.ArrowBack, null)
+                }
+            }
+        },
+        actions = {
+            onDonePressed?.let {
+                IconButton(
                     onClick = it,
                     colors = IconButtonDefaults.iconButtonColors(
                         contentColor = Color.White
                     )
                 ) {
-                    Icon(Icons.Filled.ArrowBack, null)
+                    Icon(Icons.Default.Done, null)
                 }
             }
         },

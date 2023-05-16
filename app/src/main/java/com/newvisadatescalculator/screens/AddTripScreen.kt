@@ -2,27 +2,19 @@ package com.newvisadatescalculator.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.newvisadatescalculator.R
 import com.newvisadatescalculator.VisaDatesAppBar
+import com.newvisadatescalculator.viewmodel.ErrorType
 import org.joda.time.DateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,43 +22,54 @@ import org.joda.time.DateTime
 fun AddTripScreen(
     onConfirmPressed: (DateTime?, DateTime?) -> Unit,
     onBackPressed: () -> Unit,
+    errorType: ErrorType?,
     modifier: Modifier = Modifier
 ) {
-
-    var enterDate: DateTime? by remember {
-        mutableStateOf(null)
-    }
-
-    var leaveDate: DateTime? by remember {
-        mutableStateOf(null)
-    }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-
+    Column(modifier = modifier.fillMaxSize()) {
+        val state = rememberDateRangePickerState()
 
         VisaDatesAppBar(
             onBackPress = onBackPressed,
+            onDonePressed = {
+                val startMillisec = state.selectedStartDateMillis
+                val endMillisec = state.selectedEndDateMillis
+                val startDate = if (startMillisec != null) DateTime(startMillisec) else null
+                val endDate = if (endMillisec != null) DateTime(endMillisec) else null
+                onConfirmPressed(startDate, endDate)
+            },
             textTitle = stringResource(R.string.new_trip_title)
         )
 
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            val state = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
-            DatePicker(state = state, modifier = Modifier.padding(16.dp))
 
-            Text("Entered date timestamp: ${state.selectedDateMillis ?: "no input"}")
+
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
+
+            val datePickerTitle = when (errorType) {
+                ErrorType.INTERSECTION -> stringResource(R.string.intersection_error_text)
+                ErrorType.EXCEPTION -> stringResource(R.string.exception_error_text)
+                ErrorType.NO_PERIOD -> stringResource(R.string.no_period_error_text)
+                else -> stringResource(R.string.choose_dates_trip_title)
+            }
+
+            val datePickerTitleColor = if (errorType == null) Color.Black else Color.Red
+            DateRangePicker(
+                title = {
+                    Text(
+                        text = datePickerTitle,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = datePickerTitleColor
+                    )
+                },
+                headline = {
+                    Text(
+                        text = "Start date - End date",
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                state = state,
+                modifier = Modifier.weight(1f)
+            )
+
         }
-
-        Text(
-            text = "Here will be UI for adding new trip",
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(top = 24.dp)
-                .fillMaxWidth()
-                .fillMaxHeight()
-        )
     }
 }

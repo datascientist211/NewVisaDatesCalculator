@@ -10,21 +10,22 @@ import com.newvisadatescalculator.viewmodel.AddTripViewModel
 @Composable
 fun AddTripRoute(
     onBackPressed: () -> Unit,
+    onTripSaved: (Int) -> Unit,
     addTripViewModel: AddTripViewModel = hiltViewModel()
 ) {
 
     val viewState by addTripViewModel.state.collectAsStateWithLifecycle()
 
-    AddTripScreen(
-        onConfirmPressed = { enterDate, leaveDate ->
-            enterDate?.let { startDate ->
-                viewState.enterDate = startDate
-                leaveDate?.let { endDate ->
-                    viewState.leaveDate = endDate
-                    addTripViewModel.addTrip()
-                }
-            }
-        },
-        onBackPressed = onBackPressed,
-    )
+    if (viewState.newTrip != null) {
+        onBackPressed()
+        //onTripSaved(viewState.personUid)
+    } else {
+        AddTripScreen(
+            onConfirmPressed = { startDate, endDate ->
+                addTripViewModel.addTrip(startDate, endDate)
+            },
+            onBackPressed = onBackPressed,
+            errorType = viewState.errorType
+        )
+    }
 }
