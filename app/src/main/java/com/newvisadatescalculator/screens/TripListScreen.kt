@@ -4,11 +4,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -47,7 +51,7 @@ fun TripListScreen(
 
             Text(
                 text = textString,
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(top = 24.dp)
@@ -55,15 +59,20 @@ fun TripListScreen(
             )
 
             if (trips.isNotEmpty()) {
-                CalculationButton {
-                    /* TODO */
-                }
+                CalculationButton(
+                    onCalculationClick = {
+                        {
+                            /* TODO */
+                        }
+                    },
+                    title = stringResource(id = R.string.calculate_days)
+                )
             }
 
             trips.forEach { trip ->
                 Text(
                     text = trip.uid.toString(),
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .padding(top = 24.dp)
@@ -80,12 +89,20 @@ fun TripListScreen(
 }
 
 @Composable
-fun CalculationButton(onNavigateCalculationScreen: () -> Unit) {
+fun CalculationButton(onCalculationClick: () -> Unit, title: String) {
     ExtendedFloatingActionButton(
         text = {
-            Text(stringResource(R.string.calculate_days))
+            Text(title)
         },
-        onClick = onNavigateCalculationScreen,
-        modifier = Modifier.padding(all = 16.dp)
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = title,
+            )
+        },
+        contentColor = Color.White,
+        onClick = onCalculationClick,
+        modifier = Modifier
+            .padding(all = 16.dp)
     )
 }

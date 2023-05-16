@@ -16,8 +16,14 @@ fun AddTripRoute(
     val viewState by addTripViewModel.state.collectAsStateWithLifecycle()
 
     AddTripScreen(
-        onConfirmPressed = {
-            addTripViewModel.addTrip()
+        onConfirmPressed = { enterDate, leaveDate ->
+            enterDate?.let { startDate ->
+                viewState.enterDate = startDate
+                leaveDate?.let { endDate ->
+                    viewState.leaveDate = endDate
+                    addTripViewModel.addTrip()
+                }
+            }
         },
         onBackPressed = onBackPressed,
     )

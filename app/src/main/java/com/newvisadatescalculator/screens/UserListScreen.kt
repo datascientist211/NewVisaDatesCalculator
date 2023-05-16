@@ -3,9 +3,9 @@ package com.newvisadatescalculator.screens
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,7 +32,7 @@ fun UserListScreen(
 
         Text(
             text = textString,
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(top = 24.dp)
@@ -45,7 +45,7 @@ fun UserListScreen(
             }) {
                 Text(
                     text = user.name ?: stringResource(R.string.unknown_traveler_name),
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .padding(top = 24.dp)

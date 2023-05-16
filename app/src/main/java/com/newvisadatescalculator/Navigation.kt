@@ -3,16 +3,18 @@ package com.newvisadatescalculator
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.primarySurface
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,31 +83,38 @@ fun VisaDatesNavHost(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VisaDatesAppBar(
-    onBackPress: (() -> Unit)? = null,
-    textTitle: String
+    onBackPress: (() -> Unit)? = null, textTitle: String
 ) {
     TopAppBar(
-        elevation = 4.dp,
         title = {
             Text(textTitle)
         },
-        backgroundColor = MaterialTheme.colors.primarySurface,
         navigationIcon = {
             onBackPress?.let {
-                IconButton(onClick = it) {
+                IconButton(
+                    onClick = it,
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = Color.White
+                    )
+                ) {
                     Icon(Icons.Filled.ArrowBack, null)
                 }
             }
-        })
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = Color.White,
+        ),
+    )
 }
 
 
 @Composable
 fun VisaDatesFAB(
-    onClick: () -> Unit,
-    textTitle: String
+    onClick: () -> Unit, textTitle: String
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         ExtendedFloatingActionButton(
@@ -118,7 +127,7 @@ fun VisaDatesFAB(
                     contentDescription = textTitle,
                 )
             },
-            contentColor = Color.White,
+            contentColor = Color.Black,
             onClick = onClick,
             modifier = Modifier
                 .padding(all = 16.dp)
